@@ -1,0 +1,111 @@
+/* SAROJ LAMICHHANE, ASSIGNMENT 2 
+
+ANSWER Q1:
+
+4-STEP DIMENSIONAL MODEL
+Step 1 - Business Case: Capture Salesperson's sales of a products to their customers.
+Step 2 - Granularity: Product sales unit
+Step 3 - Select Dimensions:Date, Salesperson, Products, Customer
+Step 4 - Select Facts Dimension: TotalNumberOfOrders, SalesYTD and SalesLastYear
+
+*/
+-- Create a dimension table that holds the information of date inclusing Year, Month and Day of sales.
+Create Table DimDate(
+	DateKey int Primary key,
+	Year int,
+	Month int,
+	Day int
+);
+
+-- Create a dimension table that holds Salesperosn information.SalesPersonKey acts as a Surrogate Key/primary key. It also stores SalesPersonID as we need to analyze the historical data of SalesPerson.
+Create Table DimSalesPerson(
+	SalesPersonKey int Primary Key,
+	SalesPersonID int,
+	SalesPersonFirstName varchar(100),
+	SalesPersonLastName varchar(100)
+);
+
+-- Create a dimension table that holds the information about products including name and description.
+Create Table DimProduct(
+	ProductKey int primary key,
+	Productname varchar(100),
+	ProductDescription varchar(100)
+);
+
+-- Create a dimension table that holds the information about Customer including their firstname and lastname. CustID is recorded as we analyze the historical information about customers.
+Create Table DimCust(
+	CustKey int Primary Key,
+	CustID int,
+	CustFirstname Varchar(100),
+	CustLastName Varchar(100)
+);
+
+-- Create a facttable that store Composite primary key (CPK) and foreign keys from all linked dimensions to store factual information. Attributes that are in this table are all numeric that can be mathematically calculated.
+Create Table FactTable(
+	DateKey int,
+	SalesPersonKey int,
+	ProductKey int,
+	CustKey int,
+	TotalNumberOfOrders int,
+	SalesYTD int,
+	SalesLastYear int,
+	Primary Key (DateKey, SalesPersonKey, ProductKey, CustKey),
+	Foreign Key (DateKey) References DimDate(DateKey),
+	Foreign Key (CustKey) References DimCust(CustKey),
+	Foreign Key (SalesPersonKey) References DimSalesPerson(SalesPersonKey),
+	Foreign Key (ProductKey) References DimProduct(ProductKey)
+);
+
+/* 
+ANSWER Q2:
+
+4-STEP DIMENSIONAL MODEL
+Step 1 - Business Case: Find out total number of products ordered, due and shipped.
+Step 2 - Granularity: Sale orders transaction
+Step 3 - Select Dimensions:Date, Products, Customers
+Step 4 - Select Facts Dimension: TN_Products_Ordered, TN_Products_Due, and TN_Products_Shipped
+
+*/
+
+-- Since Date dimension, products dimension and customer dimension are already created in Question 1, we only create Fact Table for this solution,
+Create Table FactTable2(
+	OrderDateKey int,
+	DueDateKey int,
+	ShippedDateKey int,
+	ProductKey int,
+	CustKey int,
+	TN_Products_Ordered int,
+	TN_Products_Due int,
+	TN_Products_Shipped int,
+	Primary Key (OrderDateKey, DueDateKey, ShippedDateKey, ProductKey, CustKey),
+	Foreign Key (OrderDateKey) References DimDate(DateKey),
+	Foreign Key (DueDateKey) References DimDate(DateKey),
+	Foreign Key (ShippedDateKey) References DimDate(DateKey),
+	Foreign Key (CustKey) References DimCust(CustKey),
+	Foreign Key (ProductKey) References DimProduct(ProductKey)
+	);
+
+	/* 
+ANSWER Q3:
+
+4-STEP DIMENSIONAL MODEL
+Step 1 - Business Case: Find out store's monthly sales performance.
+Step 2 - Granularity: Tax effectiveness and monthly sales amount
+Step 3 - Select Dimensions:Date, Products, Customers
+Step 4 - Select Facts Dimension: TaxAmount, SalesSubTotal, MonthlySalesAmount
+
+*/
+
+-- Since Date dimension, products dimension and customer dimension are already created in Question 1, we only create Fact Table for this solution as well,
+Create Table FactTable3 (
+	DateKey int,
+	ProductKey int,
+	CustKey int,
+	TaxAmount int,
+	SalesSubTotal int,
+	MonthlySalesAmount int,
+	Primary Key (DateKey, ProductKey, CustKey),
+	Foreign Key (DateKey) References DimDate(DateKey),
+	Foreign Key (CustKey) References DimCust(CustKey),
+	Foreign Key (ProductKey) References DimProduct(ProductKey)
+);
