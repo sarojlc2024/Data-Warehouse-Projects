@@ -1,7 +1,6 @@
-/* SAROJ LAMICHHANE, ASSIGNMENT 2 
+/* SAROJ LAMICHHANE, Modeling Enterprise Data Warehouse
 
-ANSWER Q1:
-
+1. 
 4-STEP DIMENSIONAL MODEL
 Step 1 - Business Case: Capture Salesperson's sales of a products to their customers.
 Step 2 - Granularity: Product sales unit
@@ -57,7 +56,7 @@ Create Table FactTable(
 );
 
 /* 
-ANSWER Q2:
+2. 
 
 4-STEP DIMENSIONAL MODEL
 Step 1 - Business Case: Find out total number of products ordered, due and shipped.
@@ -86,7 +85,7 @@ Create Table FactTable2(
 	);
 
 	/* 
-ANSWER Q3:
+3. 
 
 4-STEP DIMENSIONAL MODEL
 Step 1 - Business Case: Find out store's monthly sales performance.
